@@ -1,5 +1,16 @@
-import yfinance as yf
+from dotenv import load_dotenv
+load_dotenv()
 
-ticker = yf.Ticker("ITX.MC")  # Inditex como ejemplo
+from newsapi import NewsApiClient
+import os
 
-print(ticker.balance_sheet.index.tolist())
+newsapi = NewsApiClient(api_key=os.environ["NEWSAPI_KEY"])
+articulos = newsapi.get_everything(
+    q="Inditex",
+    language="es",
+    sort_by="publishedAt",
+    page_size=5
+)
+# devuelve dict con 'articles', cada uno con 'title', 'description', 'content'
+
+print(articulos)
