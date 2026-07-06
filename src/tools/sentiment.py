@@ -25,7 +25,7 @@ def fetch_yfinance_news(symbol: str) -> list[str]:
 def fetch_tavily_news(company_name: str) -> list[str]:
     tavily = TavilySearch(max_results=5)
     resultados = tavily.invoke(company_name)
-    return [r["content"] for r in resultados]
+    return [r["content"] for r in resultados["results"]]
 
 def fetch_newsapi_news(company_name: str) -> list[str]:
     newsapi = NewsApiClient(api_key=os.getenv("NEWSAPI_KEY"))
@@ -57,14 +57,12 @@ def get_sentiment(symbol: str, company_name: str, consulta: str) -> str:
     Looks and analyze news from the company and recent opinions from experts. Gets the news from 
     yfinance, Tavily and NewsAPI, vectorize them and gives the more relevant parts for the query made.
     """
-    texts = {
+    texts = (
         fetch_yfinance_news(symbol) +
         fetch_tavily_news(company_name) +
         fetch_newsapi_news(company_name)
-    }
-
-    retriver = build_retriever(texts)
-
-    docs = retriver.invoke(consulta)
-
+    )
+    retriever = build_retriever(texts)
+    docs = retriever.invoke(consulta)
     return formatear_docs(docs)
+

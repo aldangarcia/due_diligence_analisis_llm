@@ -1,16 +1,9 @@
-from dotenv import load_dotenv
-load_dotenv()
+from tools.sentiment import get_sentiment
 
-from newsapi import NewsApiClient
-import os
+result = get_sentiment.invoke({
+    "symbol": "ITX.MC",
+    "company_name": "Inditex",
+    "consulta": "resultados financieros recientes"
+})
 
-newsapi = NewsApiClient(api_key=os.environ["NEWSAPI_KEY"])
-articulos = newsapi.get_everything(
-    q="Inditex",
-    language="es",
-    sort_by="publishedAt",
-    page_size=5
-)
-# devuelve dict con 'articles', cada uno con 'title', 'description', 'content'
-
-print(articulos)
+print(result)
