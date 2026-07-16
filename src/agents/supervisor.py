@@ -3,7 +3,7 @@ load_dotenv()
 
 from langgraph.graph import StateGraph, START, END
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import ToolMessage, SystemMessage
+from langchain_core.messages import SystemMessage, AIMessage
 
 from graph.state import EstadoAgente
 
@@ -12,6 +12,8 @@ from agents.sentiment_agent import sentiment_agent
 
 from graph.router import router
 
+from output.report import InformeEmpresa
+
 def nodo_supervisor(state: EstadoAgente) -> dict:
     ultimo = state["messages"][-1].content
     print(f"[SUPERVISOR] Recibida consulta: {ultimo}")
@@ -19,7 +21,7 @@ def nodo_supervisor(state: EstadoAgente) -> dict:
     return {}
 
 def nodo_sintetizar(state: EstadoAgente) -> dict:
-    llm = ChatOpenAI(model="gpt-4o-mini")
+    llm = ChatOpenAI(model="gpt-4o-mini").with_structured_output(InformeEmpresa)
     mensajes = [
         SystemMessage(content="""Eres un analista financiero senior.
         Con la información de los análisis anteriores, genera un informe 
@@ -29,14 +31,14 @@ def nodo_sintetizar(state: EstadoAgente) -> dict:
         - Sentimiento y reputación
         - Riesgos detectados
         - Conclusión"""),
-    ] + state["messages"]  # añadimos todo el historial como contexto
+    ] + state["messages"] 
     
     respuesta = llm.invoke(mensajes)
-    return {"messages": [respuesta]}
+    return {"messages": [AIMessage(content=str(respuesta))]}
 
 builder = StateGraph(EstadoAgente)
 builder.add_node("supervisor", nodo_supervisor)
-builder.add_node("financial_agent", financial_agent)  # el grafo compilado como nodo
+builder.add_node("financial_agent", financial_agent)  
 builder.add_node("sentiment_agent", sentiment_agent)
 builder.add_node("sintetizar", nodo_sintetizar)
 

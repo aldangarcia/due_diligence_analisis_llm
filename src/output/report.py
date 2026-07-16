@@ -1,5 +1,8 @@
 from pydantic import BaseModel, Field
 
+from dotenv import load_dotenv
+load_dotenv()
+
 class InformeEmpresa(BaseModel):
     empresa: str = Field(description="nombre de la empresa a analizar")
     ticker: str = Field(description="indice de la empresa a analizar")
