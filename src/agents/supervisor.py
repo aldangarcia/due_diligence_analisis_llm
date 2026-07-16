@@ -21,18 +21,14 @@ def nodo_supervisor(state: EstadoAgente) -> dict:
     return {}
 
 def nodo_sintetizar(state: EstadoAgente) -> dict:
-    llm = ChatOpenAI(model="gpt-4o-mini").with_structured_output(InformeEmpresa)
+    llm = ChatOpenAI(model="gpt-4o-mini")
     mensajes = [
-        SystemMessage(content="""Eres un analista financiero senior con experiencia de 15 años analizando empresas.
-        Genera un informe de due diligence estructurado con todos los campos."""),
+        SystemMessage(content="""Eres un analista financiero senior.
+        Con la información de los análisis anteriores, genera un informe 
+        de due diligence estructurado."""),
     ] + state["messages"]
-    
-    informe = llm.invoke(mensajes)
-    return {
-        "informe": informe,
-        "messages": [AIMessage(content=str(informe))]
-    }
-
+    respuesta = llm.invoke(mensajes)
+    return {"messages": [respuesta]}
 
 builder = StateGraph(EstadoAgente)
 builder.add_node("supervisor", nodo_supervisor)

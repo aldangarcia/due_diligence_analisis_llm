@@ -5,5 +5,4 @@ from output.report import InformeEmpresa
 
 class EstadoAgente(TypedDict):
     messages : Annotated[list, add_messages]
-    informe: Optional[InformeEmpresa]
 

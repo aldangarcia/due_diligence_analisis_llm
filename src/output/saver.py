@@ -1,6 +1,6 @@
 import json 
 import os 
-import datetime
+from datetime import datetime
 
 from output.report import InformeEmpresa
 
