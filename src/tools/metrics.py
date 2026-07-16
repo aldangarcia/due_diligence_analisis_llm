@@ -12,6 +12,13 @@ def get_ratios(symbol: str) -> dict:
     income = ticker.income_stmt
     balance = ticker.balance_sheet
 
+    # debug temporal: ver qué ticker está llegando y si tiene datos
+    print(f"Ticker recibido: {symbol}")
+    print(f"Columnas income_stmt: {income.columns.tolist()}")
+
+    if income.empty or len(income.columns) == 0:
+        return {"error": f"No se encontraron datos financieros para el ticker {symbol}"}
+
     revenue = income.loc["Total Revenue", income.columns[0]]
     gross_profit = income.loc["Gross Profit", income.columns[0]]
     net_income = income.loc["Net Income", income.columns[0]]

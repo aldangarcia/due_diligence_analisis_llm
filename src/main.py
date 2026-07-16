@@ -1,9 +1,8 @@
-from tools.sentiment import get_sentiment
+from agents.supervisor import supervisor
+from langchain_core.messages import HumanMessage
 
-result = get_sentiment.invoke({
-    "symbol": "ITX.MC",
-    "company_name": "Inditex",
-    "consulta": "resultados financieros recientes"
+resultado = supervisor.invoke({
+    "messages": [HumanMessage(content="Analiza Inditex completamente")]
 })
 
-print(result)
+print(resultado["messages"][-1].content)

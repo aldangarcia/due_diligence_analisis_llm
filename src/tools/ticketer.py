@@ -1,21 +1,26 @@
 from langchain_core.tools import tool
-import financedatabase as fd
+import yfinance as yf
+
 
 @tool
-def get_ticketer(name:str, currency:str = None, market:str = None) -> str:
+def get_ticketer(name: str, exchange: str = None) -> str:
     """
-    This function gets the name of the company and returns the symbol for yfinance
+    Searches for the stock ticker of a company given its name.
+    Returns the ticker symbol to use with yfinance.
     """
-    equities = fd.Equities()
+    resultado = yf.Search(name)
+    quotes = resultado.quotes
 
-    result = equities.search(
-        name=name,
-        currency=currency,
-        market=market
-    )
+    if not quotes:
+        return f"No ticker found for {name}"
 
-    if result.empty:
-        return "No se encontró ninguna empresa con ese nombre"
-    
-    return result.index[0]
+    # probamos TODOS los tickers que devuelve yf.Search directamente
+    # sin construir nada, usando los símbolos tal cual
+    for q in quotes:
+        symbol = q["symbol"]
+        test = yf.Ticker(symbol).income_stmt
+        if not test.empty:
+            return symbol
 
+    # si ninguno tiene datos, devolvemos el primero
+    return quotes[0]["symbol"]
