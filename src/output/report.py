@@ -12,3 +12,4 @@ class InformeEmpresa(BaseModel):
     riesgos_detectados: list[str] = Field(description="lista de los riesgos detectados para la empresa")
     conclusion: str = Field(description="conclusion del estado de la empresa para el due diligence")
     puntuacion: float = Field(description="puntuacion del 1 al 10 para la empresa")
+    ratios: dict = Field(description="diccionario con los ratios financieros calculados: gross_margin, net_margin, ebitda_margin, debt_to_equity, debt_to_ebitda, current_ratio")
