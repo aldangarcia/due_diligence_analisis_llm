@@ -30,6 +30,19 @@ def guardar_informe(informe:InformeEmpresa):
 
 ---
 
+## Ratios Financieros Clave
+
+| Ratio | Valor | Interpretación |
+|-------|-------|----------------|
+| Margen Bruto | {informe.ratios.get('gross_margin', 'N/A')} | > 40% es saludable |
+| Margen Neto | {informe.ratios.get('net_margin', 'N/A')} | > 10% es bueno |
+| Margen EBITDA | {informe.ratios.get('ebitda_margin', 'N/A')} | > 15% es saludable |
+| Deuda/Equity | {informe.ratios.get('debt_to_equity', 'N/A')} | < 1 es conservador |
+| Deuda/EBITDA | {informe.ratios.get('debt_to_ebitda', 'N/A')} | < 3 es saludable |
+| Current Ratio | {informe.ratios.get('current_ratio', 'N/A')} | > 1.5 es bueno |
+
+---
+
 ## Sentimiento y Reputación
 {informe.sentimiento_reputacion}
 
@@ -42,6 +55,10 @@ def guardar_informe(informe:InformeEmpresa):
 
 ## Conclusión
 {informe.conclusion}
+
+---
+*Informe generado automáticamente por el agente de due diligence.*  
+*Fuentes: yfinance, Tavily, NewsAPI*
 """
 
     with open(f"results/{nombre}.md", "w", encoding="utf-8") as f:
