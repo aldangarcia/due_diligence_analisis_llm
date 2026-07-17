@@ -1,7 +1,16 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 
 from dotenv import load_dotenv
 load_dotenv()
+
+class RatiosFinancieros(BaseModel):
+    gross_margin: Optional[str] = Field(default=None, description="margen bruto como porcentaje o 'No disponible'")
+    net_margin: Optional[str] = Field(default=None, description="margen neto como porcentaje")
+    ebitda_margin: Optional[str] = Field(default=None, description="margen EBITDA como porcentaje")
+    debt_to_equity: Optional[str] = Field(default=None, description="ratio deuda sobre capital")
+    debt_to_ebitda: Optional[str] = Field(default=None, description="ratio deuda sobre EBITDA")
+    current_ratio: Optional[str] = Field(default=None, description="ratio de liquidez corriente o 'No disponible'")
 
 class InformeEmpresa(BaseModel):
     empresa: str = Field(description="nombre de la empresa a analizar")
@@ -12,4 +21,3 @@ class InformeEmpresa(BaseModel):
     riesgos_detectados: list[str] = Field(description="lista de los riesgos detectados para la empresa")
     conclusion: str = Field(description="conclusion del estado de la empresa para el due diligence")
     puntuacion: float = Field(description="puntuacion del 1 al 10 para la empresa")
-    ratios: dict = Field(description="diccionario con los ratios financieros calculados: gross_margin, net_margin, ebitda_margin, debt_to_equity, debt_to_ebitda, current_ratio")
