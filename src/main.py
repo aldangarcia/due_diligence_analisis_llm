@@ -6,7 +6,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 # 1) ejecuta el supervisor normalmente sin campo informe
 resultado = supervisor.invoke({
-    "messages": [HumanMessage(content="Analiza Inditex completamente")],
+    "messages": [HumanMessage(content="Analiza Banco Santander completamente")],
 })
 
 # 2) coge todos los mensajes y genera el informe estructurado aquí
